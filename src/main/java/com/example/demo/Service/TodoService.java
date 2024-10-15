@@ -2,6 +2,7 @@ package com.example.demo.Service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
 import org.springframework.data.domain.Sort;
 
@@ -13,12 +14,14 @@ import com.example.demo.Repository.TodoRepository;
 @Service
 public class TodoService {
 	
+	@Autowired
 	public TodoRepository todoRepository;
 	
 	
 
-	public TodoService(TodoRepository todoRepository){
-		this.todoRepository = todoRepository;
+
+	public TodoService(){
+		return ;
 	}
 
 	public List<Todo> create(Todo todo){

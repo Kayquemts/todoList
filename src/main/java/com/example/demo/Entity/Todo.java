@@ -1,28 +1,45 @@
 package com.example.demo.Entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "todos")
+@Table(name = "todo")
 public class Todo {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotBlank(message = "O nome é  obrigatorio")
 	private String nome;
-	private String descrição;
+	@NotBlank(message = "A descrição é obrigatório")
+	private String descricao;
 	private boolean realizado;
 	private int prioridade;
 	
 	
 	
 	public Todo() {
-		super();
+
 	}
+	
+	
+	
+	public Todo(String nome, String descricao, boolean realizado, int prioridade) {
+		this.nome = nome;
+		this.descricao = descricao;
+		this.realizado = realizado;
+		this.prioridade = prioridade;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -36,10 +53,10 @@ public class Todo {
 		this.nome = nome;
 	}
 	public String getDescrição() {
-		return descrição;
+		return descricao;
 	}
-	public void setDescrição(String descrição) {
-		this.descrição = descrição;
+	public void setDescrição(String descricao) {
+		this.descricao = descricao;
 	}
 	public boolean isRealizado() {
 		return realizado;
