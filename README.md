@@ -36,7 +36,7 @@ Windows:
 $ mvnw.cmd clean package
 ```
 
-- Execute a aplicação:
+- Execute a aplicação
 
 
 A API poderá ser acessada em [localhost:8080](http://localhost:8080).
