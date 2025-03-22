@@ -12,8 +12,7 @@ import com.example.demo.Entity.Todo;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@TestPropertySource(locations = "classpath:resources\\application-test.properties")
-
+@TestPropertySource(locations = "file:src/test/java/resources/application-test.properties")
 class DemoTodoListApplicationTests {
 
 	@Autowired
