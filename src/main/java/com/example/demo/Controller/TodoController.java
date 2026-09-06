@@ -19,8 +19,8 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
-	private TodoService todoService;
-	
+	private final TodoService todoService;
+
 	public TodoController(TodoService todoService) {
 		this.todoService = todoService;
 	}
@@ -41,7 +41,7 @@ public class TodoController {
 	}
 
 	@DeleteMapping("{id}")
-	List<Todo> delete(@PathVariable("id") Long id) {
+	List<Todo> delete(@PathVariable Long id) {
 		return todoService.delete(id);
 	}
 }
