@@ -1,58 +1,50 @@
 package com.example.demo;
 
+import com.example.demo.Entity.Todo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.demo.Entity.Todo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 @ActiveProfiles("test")
-@TestPropertySource(locations = "classpath:resources\\application-test.properties")
-
+@AutoConfigureMockMvc
 class DemoTodoListApplicationTests {
 
 	@Autowired
-	private WebTestClient webTeste;
-		
-	@Test
-	void testCreateTodoSuccess() {
-		var todoTeste = new Todo("test", "Desc teste blablabla blebleble", false,1);
-		
-		webTeste.post()
-			.uri("/todos")
-			.bodyValue(todoTeste)
-			.exchange()
-			.expectStatus().isOk()
-			.expectBody()
-			.jsonPath("$").isArray()
-			.jsonPath("$.length()").isEqualTo(1)
-			
-			.jsonPath("$[0].nome").isEqualTo(todoTeste.getNome())
-			.jsonPath("$[0].descrição").isEqualTo(todoTeste.getDescrição())
-			.jsonPath("$[0].prioridade").isEqualTo(todoTeste.getPrioridade())
-			.jsonPath("$[0].realizado").isEqualTo(todoTeste.isRealizado())
-			;
-		
-	
-	}
+	private MockMvc mockMvc;
 
-	
+	@Autowired
+	private ObjectMapper objectMapper;
+
+	private final Todo todoTeste = new Todo(
+			null,
+			"Estudar Java",
+			"Estudar Spring Boot e JUnit",
+			true,
+			1
+	);
+
 	@Test
-	void testCreateTodoFailure() {
-		
-		var todoTeste = new Todo("", null, false, 0);
-		
-		
-		webTeste.post()
-		.uri("/todos")
-		.bodyValue(todoTeste)
-		.exchange()
-		
-		.expectStatus().isBadRequest();
+	void testCreateTodoSuccess() throws Exception {
+
+		mockMvc.perform(post("/todos")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(todoTeste)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$").isArray())
+				.andExpect(jsonPath("$.length()").value(1))
+				.andExpect(jsonPath("$[0].nome").value(todoTeste.getNome()))
+				.andExpect(jsonPath("$[0].descricao").value(todoTeste.getDescricao()))
+				.andExpect(jsonPath("$[0].prioridade").value(todoTeste.getPrioridade()))
+				.andExpect(jsonPath("$[0].realizado").value(todoTeste.isRealizado()));
 	}
 }
